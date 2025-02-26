@@ -19,11 +19,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.volley.*
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONException
+import org.json.JSONObject
 
 @Composable
 fun LoginScreen() {
@@ -113,26 +117,56 @@ fun performLogin(context: Context, email: String, password: String) {
         return
     }
 
-    val url = "${DbContract.urlLogin}?email=$email&password=$password"
+    val url = DbContract.urlLogin
     Log.d("LoginDebug", "Requesting URL: $url")
 
-    val stringRequest = StringRequest(
-        Request.Method.GET, url,
+    val jsonBody = JSONObject()
+    try {
+        jsonBody.put("email", email)
+        jsonBody.put("password", password)
+    } catch (e: JSONException) {
+        e.printStackTrace()
+    }
+
+    val jsonObjectRequest = object : JsonObjectRequest(
+        Request.Method.POST, url, jsonBody,
         { response ->
             Log.d("LoginDebug", "Response: $response")
-            if (response.trim().lowercase() == "login successful") {
-                Toast.makeText(context, "Login Berhasil", Toast.LENGTH_SHORT).show()
-                context.startActivity(Intent(context, HomeActivity::class.java))
-            } else {
-                Toast.makeText(context, "Login Gagal", Toast.LENGTH_SHORT).show()
+            try {
+                val status = response.getInt("status")  // Ambil status response
+                val message = response.getString("message")
+
+                if (status == 200 && message == "Login berhasil") {
+                    Toast.makeText(context, "Login Berhasil!", Toast.LENGTH_SHORT).show()
+                    context.startActivity(Intent(context, HomeActivity::class.java))
+                } else {
+                    Toast.makeText(context, "Login Gagal: $message", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: JSONException) {
+                Toast.makeText(context, "Login Gagal: Error Parsing JSON", Toast.LENGTH_SHORT).show()
             }
         },
         { error ->
             Log.e("LoginDebug", "Error: ${error.message}")
             Toast.makeText(context, "Error: ${error.message}", Toast.LENGTH_SHORT).show()
         }
-    )
+    ) {
+        override fun getHeaders(): Map<String, String> {
+            val headers = HashMap<String, String>()
+            headers["Content-Type"] = "application/json"
+            return headers
+        }
+    }
 
     val requestQueue: RequestQueue = Volley.newRequestQueue(context)
-    requestQueue.add(stringRequest)
+    requestQueue.add(jsonObjectRequest)
+}
+
+
+
+
+@Preview (showBackground = true, device = "spec:width=412dp, height=915dp, dpi=440")
+@Composable
+fun LoginScreenPreview() {
+    LoginScreen()
 }
