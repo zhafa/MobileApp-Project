@@ -1,4 +1,4 @@
-package com.example.mobileapptechnobit
+package com.example.mobileapptechnobit.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -1,4 +1,4 @@
-package com.example.mobileapptechnobit
+package com.example.mobileapptechnobit.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text

@@ -1,9 +1,8 @@
-package com.example.mobileapptechnobit
+package com.example.mobileapptechnobit.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -20,8 +19,8 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.pager.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
-import kotlinx.coroutines.CoroutineScope
 import com.example.mobileapptechnobit.R
+import com.example.mobileapptechnobit.Screen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
