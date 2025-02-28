@@ -79,7 +79,7 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel()) {
                     visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                     trailingIcon = {
                         Image(
-                            painter = painterResource(id = if (passwordVisible) R.drawable.eyes_open else R.drawable.eyes_open),
+                            painter = painterResource(id = if (passwordVisible) R.drawable.eyes_closed else R.drawable.eyes_open),
                             contentDescription = "Toggle Password Visibility",
                             modifier = Modifier
                                 .size(20.dp)
